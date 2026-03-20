@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit Industry</title>
+
+{% block body %}
+    <h1>Edit Industry</h1>
+
+    {{ include('admin/industry/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('admin.industry') }}">back to list</a>
+
+    {{ include('admin/industry/_delete_form.html.twig') }}
+{% endblock %}

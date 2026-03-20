@@ -1,0 +1,86 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Account index{% endblock %}
+
+{% block content %}
+
+<!-- Cards -->
+        <div class="flex flex-col gap-4">
+
+            <div class="bg-slate-800 p-4 rounded-xl flex justify-between items-center shadow">
+                <div>
+                    <h3 class="font-semibold">Entreprise XYZ</h3>
+                    <p class="text-sm text-gray-400">Siège/filiale - Ville</p>
+                </div>
+
+                <div class="flex gap-3">
+                    <span class="bg-blue-500 px-3 py-1 rounded-full text-xs">
+                        1 Opportunité
+                    </span>
+                    <span class="bg-purple-500 px-3 py-1 rounded-full text-xs">
+                        Tier 1
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    <h1>Account index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>OwnerUserId</th>
+                <th>AddressLine1</th>
+                <th>AddressLine2</th>
+                <th>PostalCode</th>
+                <th>City</th>
+                <th>Country</th>
+                <th>Siret</th>
+                <th>AccountName</th>
+                <th>Website</th>
+                <th>PhoneNumber</th>
+                <th>Comment</th>
+                <th>Industry</th>
+                <th>RiskScoring</th>
+                <th>PriorityScoring</th>
+                <th>Turnover</th>
+                <th>NumberOfEmployees</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for account in accounts %}
+            <tr>
+                <td>{{ account.id }}</td>
+                <td>{{ account.ownerUserId }}</td>
+                <td>{{ account.addressLine1 }}</td>
+                <td>{{ account.addressLine2 }}</td>
+                <td>{{ account.postalCode }}</td>
+                <td>{{ account.City }}</td>
+                <td>{{ account.Country | country_name }}</td>-
+                <td>{{ account.siret }}</td>
+                <td>{{ account.accountName }}</td>
+                <td>{{ account.website }}</td>
+                <td>{{ account.phoneNumber }}</td>
+                <td>{{ account.comment }}</td>
+                <td>{{ account.industry ? account.industry.name : '' }}</td>
+                <td>{{ account.riskScoring }}</td>
+                <td>{{ account.priorityScoring }}</td>
+                <td>{{ account.turnover }}</td>
+                <td>{{ account.numberOfEmployees }}</td>
+                <td>
+                    <a href="{{ path('account.show', {'slug': account.slug}) }}">show</a>
+                    <a href="{{ path('account.edit', {'slug': account.slug}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="18">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('account.new') }}">Create new</a>
+{% endblock %}

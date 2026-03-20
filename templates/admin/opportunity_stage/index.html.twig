@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<title>OpportunityStage index</title>
+
+{% block body %}
+    <h1>OpportunityStage index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Position</th>
+                <th>Probability</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for opportunity_stage in opportunity_stages %}
+            <tr>
+                <td>{{ opportunity_stage.id }}</td>
+                <td>{{ opportunity_stage.name }}</td>
+                <td>{{ opportunity_stage.position }}</td>
+                <td>{{ opportunity_stage.probability }}</td>
+                <td>
+                    <a href="{{ path('admin.opportunity_stage.edit', {'id': opportunity_stage.id}) }}">edit</a>
+                    {{ include('admin/opportunity_stage/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin.opportunity_stage.new') }}">Create new</a>
+{% endblock %}

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit ContactRole</title>
+
+{% block body %}
+    <h1>Edit ContactRole</h1>
+
+    {{ include('admin/contact_role/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('admin.contact_role') }}">back to list</a>
+
+    {{ include('admin/contact_role/_delete_form.html.twig') }}
+{% endblock %}

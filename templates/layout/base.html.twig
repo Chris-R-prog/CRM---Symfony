@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}CRM | IntelliLead{% endblock %}</title>
+
+    {% block fonts %}
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    {% endblock %}
+
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
+    {% endblock %}
+
+    {% block javascripts %}
+            {% block importmap %}{{ importmap('app') }}{% endblock %}
+    {% endblock %}
+</head>
+
+<body>
+
+{% block body %}
+<div class="flex min-h-screen bg-slate-950 text-red-500">
+<p class="text-red-500">test</p>
+    {% include 'partials/sidebar.html.twig' %}
+
+    <main class="flex-1 p-8">
+    <!-- KPI Card -->
+        <div class="bg-slate-800 rounded-xl p-6 shadow-lg mb-6">
+            <h2 class="text-lg text-cyan-400 mb-4">
+                Zone KPI IA + recommandations
+            </h2>
+
+            <div class="flex gap-6">
+                <div class="w-32 h-32 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full"></div>
+                <div class="w-32 h-32 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-full"></div>
+
+                <div class="flex flex-col gap-2">
+                    <div class="h-3 w-40 bg-cyan-400 rounded"></div>
+                    <div class="h-3 w-32 bg-cyan-400 rounded"></div>
+                    <div class="h-3 w-36 bg-cyan-400 rounded"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search -->
+        <input
+            type="text"
+            placeholder="Search"
+            class="w-full mb-6 px-4 py-2 rounded-lg bg-slate-800 border border-slate-700"
+        />
+
+        {% block content %}
+
+        {% endblock %}
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </main>
+
+</div>
+{% endblock %}
+
+</body>
+</html>

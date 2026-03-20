@@ -1,0 +1,136 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Account{% endblock %}
+
+{% block body %}
+    <h1>{{ account.accountName }}</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ account.id }}</td>
+            </tr>
+            <tr>
+                <th>OwnerUserId</th>
+                <td>{{ account.ownerUserId }}</td>
+            </tr>
+            <tr>
+                <th>AddressLine1</th>
+                <td>{{ account.addressLine1 }}</td>
+            </tr>
+            <tr>
+                <th>AddressLine2</th>
+                <td>{{ account.addressLine2 }}</td>
+            </tr>
+            <tr>
+                <th>PostalCode</th>
+                <td>{{ account.postalCode }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ account.City }}</td>
+            </tr>
+            <tr>
+                <th>Country</th>
+                <td>{{ account.Country }}</td>
+            <tr>
+                <th>Siret</th>
+                <td>{{ account.siret }}</td>
+            </tr>
+            <tr>
+                <th>AccountName</th>
+                <td>{{ account.accountName }}</td>
+            </tr>
+            <tr>
+                <th>Website</th>
+                <td>{{ account.website }}</td>
+            </tr>
+            <tr>
+                <th>PhoneNumber</th>
+                <td>{{ account.phoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <td>{{ account.comment }}</td>
+            </tr>
+            <tr>
+                <th>IndustryId</th>
+                <td>{{ account.industry ? account.industry.name : '' }}</td>
+            </tr>
+            <tr>
+                <th>RiskScoring</th>
+                <td>{{ account.riskScoring }}</td>
+            </tr>
+            <tr>
+                <th>PriorityScoring</th>
+                <td>{{ account.priorityScoring }}</td>
+            </tr>
+            <tr>
+                <th>Turnover</th>
+                <td>{{ account.turnover }}</td>
+            </tr>
+            <tr>
+                <th>NumberOfEmployees</th>
+                <td>{{ account.numberOfEmployees }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('account.list') }}">back to list</a>
+
+    <a href="{{ path('account.edit', {'slug': account.slug}) }}">edit</a>
+
+    {{ include('account/_delete_form.html.twig') }}
+
+
+<a href="{{ path('contact.new', {slug: account.slug}) }}">
+    ➕ Ajouter un contact
+</a>
+
+<hr>
+
+<h2>Contacts</h2>
+
+<ul>
+    {% for contact in contacts %}
+        <li>
+            {{ contact.firstName }} {{ contact.lastName }}
+            ({{ contact.email }})
+
+            <a href="{{ path('contact.edit', {slug: contact.slug}) }}">✏️</a>
+            <a href="{{ path('contact.show', {slug: contact.slug}) }}">Détail</a>
+        </li>
+    {% else %}
+        <li>Aucun contact lié à ce compte</li>
+    {% endfor %}
+</ul>
+
+<a href="{{ path('contact.new', {slug: account.slug}) }}">
+    ➕ Ajouter un contact
+</a>
+
+<hr>
+
+<h2>Opportunités</h2>
+
+<ul>
+    {% for opportunity in opportunities %}
+        <li>
+            {{ opportunity.title }} {{ opportunity.amount }}
+            {{ opportunity.priority.value }} {{ opportunity.opportunityStage ? opportunity.opportunityStage.name : '—' }} {{ opportunity.engagement ?? '—' }}
+            </tr>
+
+            <a href="{{ path('opportunity.edit', {slug: opportunity.slug}) }}">✏️</a>
+            <a href="{{ path('opportunity.show', {slug: opportunity.slug}) }}">Détail</a>
+        </li>
+    {% else %}
+        <li>Aucune opportunité liée à ce compte</li>
+    {% endfor %}
+</ul>
+
+<a href="{{ path('opportunity.new', {slug: account.slug}) }}">
+    ➕ Ajouter une opportunité
+</a>
+
+{% endblock %}

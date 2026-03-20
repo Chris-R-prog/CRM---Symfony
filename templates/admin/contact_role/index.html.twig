@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+
+<title>ContactRole index</title>
+
+{% block body %}
+    <h1>ContactRole index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for contact_role in contact_roles %}
+            <tr>
+                <td>{{ contact_role.id }}</td>
+                <td>{{ contact_role.name }}</td>
+                <td>{{ contact_role.description }}</td>
+                <td>
+                    <a href="{{ path('admin.contact_role.edit', {'id': contact_role.id}) }}">edit</a>
+                    {{ include('admin/contact_role/_delete_form.html.twig') }}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('admin.contact_role.new') }}">Create new</a>
+{% endblock %}

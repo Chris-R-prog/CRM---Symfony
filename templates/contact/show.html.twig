@@ -1,0 +1,75 @@
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Contact{% endblock %}
+
+    {% block content %}
+
+    <h1>Contact</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ contact.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ contact.title ? contact.title.value :"—"}}</td>
+            </tr>
+            <tr>
+                <th>FirstName</th>
+                <td>{{ contact.firstName }}</td>
+            </tr>
+            <tr>
+                <th>LastName</th>
+                <td>{{ contact.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Jobtitle</th>
+                <td>{{ contact.jobtitle }}</td>
+            </tr>
+            <tr>
+                <th>PhoneNumber</th>
+                <td>{{ contact.phoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>Mobile</th>
+                <td>{{ contact.mobile }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ contact.email }}</td>
+            </tr>
+            <tr>
+                <th>Addressline1</th>
+                <td>{{ contact.addressline1 }}</td>
+            </tr>
+            <tr>
+                <th>Addressline2</th>
+                <td>{{ contact.addressline2 }}</td>
+            </tr>
+            <tr>
+                <th>City</th>
+                <td>{{ contact.city }}</td>
+            </tr>
+            <tr>
+                <th>Postalcode</th>
+                <td>{{ contact.postalcode }}</td>
+            </tr>
+            <tr>
+                <th>Country</th>
+                <td>{{ contact.country }}</td>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <td>{{ contact.comment }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('contact.edit', {'slug': contact.slug}) }}">edit</a>
+
+    {{ include('contact/_delete_form.html.twig') }}
+
+    {% endblock %}
+

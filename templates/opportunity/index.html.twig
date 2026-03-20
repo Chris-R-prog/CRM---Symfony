@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+
+<title>Opportunity index</title>
+
+{% block body %}
+    <h1>Opportunity index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Amount</th>
+                <th>Priority</th>
+                <th>Expected_close_date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for opportunity in opportunities %}
+            <tr>
+                <td>{{ opportunity.id }}</td>
+                <td>{{ opportunity.title }}</td>
+                <td>{{ opportunity.amount }}</td>
+                <td>{{ opportunity.priority.value }}</td>
+                <td>{{ opportunity.expectedCloseDate ? opportunity.expectedCloseDate|date('d-m-Y') : '' }}</td>
+                <td>
+                    <a href="{{ path('opportunity.show', {'slug': opportunity.slug}) }}">show</a>
+                    <a href="{{ path('opportunity.edit', {'slug': opportunity.slug}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

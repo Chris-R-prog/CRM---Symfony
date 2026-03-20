@@ -1,0 +1,58 @@
+
+{% extends 'layout/base.html.twig' %}
+
+{% block title %}Contact index{% endblock %}
+
+    {% block content %}
+        <h1>Contact index</h1>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Title</th>
+                    <th>FirstName</th>
+                    <th>LastName</th>
+                    <th>Jobtitle</th>
+                    <th>PhoneNumber</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Addressline1</th>
+                    <th>Addressline2</th>
+                    <th>City</th>
+                    <th>Postalcode</th>
+                    <th>Country</th>
+                    <th>Comment</th>
+                    <th>actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for contact in contacts %}
+                <tr>
+                    <td>{{ contact.id }}</td>
+                    <td>{{ contact.title.value }}</td>
+                    <td>{{ contact.firstName }}</td>
+                    <td>{{ contact.lastName }}</td>
+                    <td>{{ contact.jobtitle }}</td>
+                    <td>{{ contact.phoneNumber }}</td>
+                    <td>{{ contact.mobile }}</td>
+                    <td>{{ contact.email }}</td>
+                    <td>{{ contact.addressline1 }}</td>
+                    <td>{{ contact.addressline2 }}</td>
+                    <td>{{ contact.city }}</td>
+                    <td>{{ contact.postalcode }}</td>
+                    <td>{{ contact.country }}</td>
+                    <td>{{ contact.comment }}</td>
+                    <td>
+                        <a href="{{ path('contact.show', {'slug': contact.slug}) }}">show</a>
+                        <a href="{{ path('contact.edit', {'slug': contact.slug}) }}">edit</a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="15">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endblock %}

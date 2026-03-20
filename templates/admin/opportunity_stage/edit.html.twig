@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<title>Edit OpportunityStage</title>
+
+{% block body %}
+    <h1>Edit OpportunityStage</h1>
+
+    {{ include('admin/opportunity_stage/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('admin.opportunity_stage') }}">back to list</a>
+
+    {{ include('admin/opportunity_stage/_delete_form.html.twig') }}
+{% endblock %}

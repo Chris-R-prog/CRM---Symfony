@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<title>New Opportunity</title>
+
+{% block body %}
+    <h1>Create new Opportunity</h1>
+
+    {{ include('opportunity/_form.html.twig') }}
+
+    <a href="{{ path('opportunity.list') }}">back to list</a>
+{% endblock %}

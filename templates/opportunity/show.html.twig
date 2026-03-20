@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+
+<title>Opportunity</title>
+
+{% block body %}
+    <h1>Opportunity</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ opportunity.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ opportunity.title }}</td>
+            </tr>
+            <tr>
+                <th>Amount</th>
+                <td>{{ opportunity.amount }}</td>
+            </tr>
+            <tr>
+                <th>Priority</th>
+                <td>{{ opportunity.priority.value }}</td>
+            </tr>
+            <tr>
+                <th>Expected close date</th>
+                <td>
+                    {{ opportunity.expectedCloseDate 
+                        ? opportunity.expectedCloseDate|date('d/m/Y') 
+                        : '—' 
+                    }}
+                </td>
+            </tr>
+            <tr>
+                <th>Étape du cycle de vente</th>
+                <td>
+                    {{ opportunity.opportunityStage 
+                        ? opportunity.opportunityStage.name 
+                        : '—' 
+                    }}
+                </td>
+            </tr>
+            <tr>
+                <th>Engagement forecast</th>
+                <td>{{ opportunity.engagement ?? '—' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('opportunity.edit', {'slug': opportunity.slug}) }}" class="btn btn-primary">
+        ✏️ Edit
+    </a>
+
+    {{ include('opportunity/_delete_form.html.twig') }}
+
+    <hr>
+
+    <h3>Contacts liés</h3>
+
+    <ul>
+        {% for oc in opportunity.opportunityContacts %}
+            <li>
+                <strong>{{ oc.contact.displayName }}</strong>
+
+                —
+                {{ oc.contactRole ? oc.contactRole.name : 'Aucun rôle' }}
+
+                <a href="{{ path('opportunity_contact.edit', { id: oc.id }) }}"
+                   class="btn btn-sm btn-secondary">
+                    Modifier
+                </a>
+
+                <form method="post"
+                      action="{{ path('opportunity_contact.delete', { id: oc.id }) }}"
+                      onsubmit="return confirm('Supprimer ce contact ?');"
+                      style="display:inline-block">
+
+                    <input type="hidden" name="_token"
+                           value="{{ csrf_token('delete' ~ oc.id) }}">
+
+                    <button type="submit" class="btn btn-danger btn-sm">
+                        Supprimer
+                    </button>
+                </form>
+            </li>
+        {% else %}
+            <li>Aucun contact lié</li>
+        {% endfor %}
+    </ul>
+
+    <hr>
+
+    <h4>Ajouter un contact</h4>
+
+    <a href="{{ path('opportunity.edit', {'slug': opportunity.slug}) }}"
+       class="btn btn-success">
+        ➕ Ajouter / modifier les contacts
+    </a>
+
+{% endblock %}
