@@ -13,7 +13,7 @@
             </tr>
             <tr>
                 <th>Title</th>
-                <td>{{ lead.title }}</td>
+                <td>{{ lead.title.label }}</td>
             </tr>
             <tr>
                 <th>FirstName</th>
@@ -52,12 +52,16 @@
                 <td>{{ lead.comment }}</td>
             </tr>
             <tr>
+                <th>Country</th>
+                <td>{{ lead.country|country_name('fr') }}</td>
+            <tr>
+            <tr>
                 <th>Converted_at</th>
                 <td>{{ lead.convertedAt ? lead.convertedAt|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
                 <th>Status</th>
-                <td>{{ lead.status }}</td>
+                <td>{{ lead.status.label }}</td>
             </tr>
             <tr>
                 <th>CreatedAt</th>
@@ -78,9 +82,9 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_lead_index') }}">back to list</a>
+    <a href="{{ path('leads.list') }}">back to list</a>
 
-    <a href="{{ path('app_lead_edit', {'id': lead.id}) }}">edit</a>
+    <a href="{{ path('lead.edit', {'slug': lead.slug}) }}">edit</a>
 
     {{ include('lead/_delete_form.html.twig') }}
 {% endblock %}

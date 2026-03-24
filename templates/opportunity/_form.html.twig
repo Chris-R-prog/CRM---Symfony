@@ -1,11 +1,4 @@
 {{ form_start(form) }}
-
-    {{ form_row(form.title) }}
-    {{ form_row(form.amount) }}
-    {{ form_row(form.priority) }}
-    {{ form_row(form.expected_close_date) }}
-    {{ form_row(form.opportunityStage) }}
-    {{ form_end(form) }}
-
-    <button class="btn">Save</button>
-
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}

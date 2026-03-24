@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Contracts\SluggableInterface;
 use App\Entity\Traits\Sluggable;
 use App\Entity\Traits\SoftDeleteable;
 use App\Entity\Traits\Timestampable;
@@ -17,16 +18,22 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(indexes: [
     new ORM\Index(name: "company_name_idx", columns: ["company_name"]),
 ])]
-class Lead
+
+class Lead implements SluggableInterface
 {
 
     use Timestampable;
     use SoftDeleteable;
     use Sluggable;
 
-    public function getSlugSource(): string
+    public function getSlugSource(): ?string
     {
         return $this->companyName . ' ' . $this->subject;
+    }
+
+    public function getSlugFields(): array
+    {
+        return ['companyName', 'subject'];
     }
 
     #[ORM\Id]
@@ -99,7 +106,11 @@ class Lead
     private ?\DateTimeImmutable $converted_at = null;
 
     #[ORM\Column(enumType: Status::class)]
-    private Status $status = Status::NEW;
+    private Status $status = Status::Nouveau;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    #[Assert\Country]
+    private ?string $country = 'FR';
 
     public function getId(): ?int
     {
@@ -234,6 +245,41 @@ class Lead
     public function setStatus(Status $status): static
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getTitle(): ?Title
+    {
+        return $this->title;
+    }
+
+    public function setTitle(?Title $title): static
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function getComment(): ?string
+    {
+        return $this->comment;
+    }
+
+    public function setComment(?string $comment): static
+    {
+        $this->comment = $comment ? trim($comment) : null;
+        return $this;
+    }
+
+    public function getCountry(): ?string
+    {
+        return $this->country;
+    }
+
+    public function setCountry(?string $country): static
+    {
+        $this->country = $country ? strtoupper(trim($country)) : null;
 
         return $this;
     }

@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Account;
 use App\Entity\Industry;
-use App\Form\FormListenerFactory;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -20,7 +19,6 @@ use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 class AccountType extends AbstractType
 {
-    public function __construct(private FormListenerFactory $listenerFactory) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

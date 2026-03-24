@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Contracts\SluggableInterface;
 use App\Entity\Industry;
 use App\Entity\Traits\SoftDeleteable;
 use App\Entity\Traits\Timestampable;
@@ -23,16 +24,21 @@ use App\Entity\Traits\Sluggable;
     new ORM\Index(name: "address_postal_idx", columns: ["postalcode"]),
 ])]
 
-class Account
+class Account implements SluggableInterface
 {
 
     use Timestampable;
     use SoftDeleteable;
     use Sluggable;
 
-    public function getSlugSource(): string
+    public function getSlugSource(): ?string
     {
         return $this->accountName;
+    }
+
+    public function getSlugFields(): array
+    {
+        return ['accountName'];
     }
 
     #[ORM\Id]

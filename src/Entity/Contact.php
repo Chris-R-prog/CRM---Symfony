@@ -13,6 +13,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Enum\Title;
 use App\Entity\Account;
+use App\Entity\Contracts\SluggableInterface;
 use App\Entity\Traits\Sluggable;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
@@ -24,17 +25,22 @@ use App\Entity\Traits\Sluggable;
     new ORM\Index(name: "address_postal_idx", columns: ["postalcode"]),
 ])]
 
-class Contact
+class Contact implements SluggableInterface
 {
+
+    public function getSlugSource(): ?string
+    {
+        return $this->firstName . ' ' . $this->lastName;
+    }
+
+    public function getSlugFields(): array
+    {
+        return ['firstName', 'lastName'];
+    }
 
     use Timestampable;
     use SoftDeleteable;
     use Sluggable;
-
-    public function getSlugSource(): string
-    {
-        return $this->firstName . ' ' . $this->lastName;
-    }
 
     #[ORM\Id]
     #[ORM\GeneratedValue]

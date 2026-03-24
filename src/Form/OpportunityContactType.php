@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\Contact;
 use App\Entity\ContactRole;
-use App\Entity\Opportunity;
 use App\Entity\OpportunityContact;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;

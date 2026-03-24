@@ -14,7 +14,7 @@
             </tr>
             <tr>
                 <th>Title</th>
-                <td>{{ contact.title ? contact.title.value :"—"}}</td>
+                <td>{{ contact.title ? contact.title.label :"—"}}</td>
             </tr>
             <tr>
                 <th>FirstName</th>
@@ -58,7 +58,7 @@
             </tr>
             <tr>
                 <th>Country</th>
-                <td>{{ contact.country }}</td>
+                <td>{{ account.country|country_name('fr') }}</td>
             </tr>
             <tr>
                 <th>Comment</th>

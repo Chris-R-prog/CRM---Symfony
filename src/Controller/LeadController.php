@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use App\Entity\Account;
 use App\Entity\Lead;
 use App\Form\LeadType;
 use App\Repository\LeadRepository;
@@ -28,7 +27,6 @@ final class LeadController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
-        #[MapEntity(mapping: ['slug' => 'slug'])] Lead $lead,
     ): Response {
         $lead = new Lead();
         $form = $this->createForm(LeadType::class, $lead);
@@ -40,14 +38,14 @@ final class LeadController extends AbstractController
 
             $this->addFlash('success', 'Le lead a bien été créé');
 
-            return $this->redirectToRoute('account.show', [
+            return $this->redirectToRoute('leads.list', [
                 'slug' => $lead->getSlug(),
             ]);
         }
 
         return $this->render('lead/new.html.twig', [
             'form' => $form->createView(),
-            'account' => $lead,
+            'lead' => $lead,
         ]);
     }
 
@@ -63,7 +61,7 @@ final class LeadController extends AbstractController
         ]);
     }
 
-    #[Route('lead/{slug}/edit', name: 'lead.edit', methods: ['GET', 'POST'])]
+    #[Route('/lead/{slug}/edit', name: 'lead.edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         #[MapEntity(mapping: ['slug' => 'slug'])] Lead $lead,
@@ -77,12 +75,12 @@ final class LeadController extends AbstractController
 
             $this->addFlash('success', 'Le lead a bien été mis à jour');
 
-            return $this->redirectToRoute('app_lead_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('leads.list', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('lead/edit.html.twig', [
             'lead' => $lead,
-            'form' => $form->createview(),
+            'form' => $form->createView(),
         ]);
     }
 

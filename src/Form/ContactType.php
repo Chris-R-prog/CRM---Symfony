@@ -3,7 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Contact;
-use App\Form\FormListenerFactory;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
@@ -15,7 +14,6 @@ use Symfony\Component\Form\Extension\Core\Type\EnumType;
 
 class ContactType extends AbstractType
 {
-    public function __construct(private FormListenerFactory $listenerFactory) {}
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {

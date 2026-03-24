@@ -8,4 +8,14 @@ enum Title: string
     case Mme = 'mme';
     case Autre = 'other';
     case Dr = 'dr';
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::M => 'M',
+            self::Mme => 'Mme',
+            self::Autre => 'Autre',
+            self::Dr => 'Dr',
+        };
+    }
 }

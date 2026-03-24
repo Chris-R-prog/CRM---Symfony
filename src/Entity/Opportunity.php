@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\Contracts\SluggableInterface;
 use App\Entity\Traits\Sluggable;
 use App\Entity\Traits\SoftDeleteable;
 use App\Entity\Traits\Timestampable;
@@ -19,16 +20,21 @@ use App\Enum\Priority;
     new ORM\Index(name: "title_idx", columns: ["title"]),
 ])]
 
-class Opportunity
+class Opportunity implements SluggableInterface
 {
 
     use Timestampable;
     use SoftDeleteable;
     use Sluggable;
 
-    public function getSlugSource(): string
+    public function getSlugSource(): ?string
     {
         return $this->account . ' ' . $this->title;
+    }
+
+    public function getSlugFields(): array
+    {
+        return ['account', 'title'];
     }
 
     #[ORM\Id]
