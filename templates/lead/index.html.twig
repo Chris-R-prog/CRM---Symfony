@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<title>Lead index</title>
+
+{% block body %}
+    <h1>Lead index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>FirstName</th>
+                <th>LastName</th>
+                <th>Email</th>
+                <th>PhoneNumber</th>
+                <th>CompanyName</th>
+                <th>Jobtitle</th>
+                <th>Source</th>
+                <th>Subject</th>
+                <th>Comment</th>
+                <th>Status</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for lead in leads %}
+            <tr>
+                <td>{{ lead.id }}</td>
+                <td>{{ lead.title }}</td>
+                <td>{{ lead.firstName }}</td>
+                <td>{{ lead.lastName }}</td>
+                <td>{{ lead.email }}</td>
+                <td>{{ lead.phoneNumber }}</td>
+                <td>{{ lead.companyName }}</td>
+                <td>{{ lead.jobtitle }}</td>
+                <td>{{ lead.source }}</td>
+                <td>{{ lead.subject }}</td>
+                <td>{{ lead.comment }}</td>
+                <td>{{ lead.status }}</td>
+                <td>
+                    <a href="{{ path('lead.show', {'slug': lead.slug}) }}">show</a>
+                    <a href="{{ path('lead.edit', {'slug': lead.slug}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="18">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('lead.new') }}">Create new</a>
+{% endblock %}

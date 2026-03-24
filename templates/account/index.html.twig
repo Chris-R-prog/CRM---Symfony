@@ -29,46 +29,28 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
-                <th>OwnerUserId</th>
-                <th>AddressLine1</th>
-                <th>AddressLine2</th>
                 <th>PostalCode</th>
                 <th>City</th>
-                <th>Country</th>
-                <th>Siret</th>
                 <th>AccountName</th>
                 <th>Website</th>
                 <th>PhoneNumber</th>
-                <th>Comment</th>
                 <th>Industry</th>
                 <th>RiskScoring</th>
                 <th>PriorityScoring</th>
-                <th>Turnover</th>
-                <th>NumberOfEmployees</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for account in accounts %}
             <tr>
-                <td>{{ account.id }}</td>
-                <td>{{ account.ownerUserId }}</td>
-                <td>{{ account.addressLine1 }}</td>
-                <td>{{ account.addressLine2 }}</td>
                 <td>{{ account.postalCode }}</td>
                 <td>{{ account.City }}</td>
-                <td>{{ account.Country | country_name }}</td>-
-                <td>{{ account.siret }}</td>
                 <td>{{ account.accountName }}</td>
                 <td>{{ account.website }}</td>
                 <td>{{ account.phoneNumber }}</td>
-                <td>{{ account.comment }}</td>
                 <td>{{ account.industry ? account.industry.name : '' }}</td>
                 <td>{{ account.riskScoring }}</td>
                 <td>{{ account.priorityScoring }}</td>
-                <td>{{ account.turnover }}</td>
-                <td>{{ account.numberOfEmployees }}</td>
                 <td>
                     <a href="{{ path('account.show', {'slug': account.slug}) }}">show</a>
                     <a href="{{ path('account.edit', {'slug': account.slug}) }}">edit</a>

@@ -68,7 +68,7 @@ final class ContactController extends AbstractController
         ]);
     }
 
-    #[Route('contacts/{slug}/edit', name: 'contact.edit', methods: ['GET', 'POST'])]
+    #[Route('contact/{slug}/edit', name: 'contact.edit', methods: ['GET', 'POST'])]
     public function edit(
         Request $request,
         #[MapEntity(mapping: ['slug' => 'slug'])] Contact $contact,
@@ -92,11 +92,11 @@ final class ContactController extends AbstractController
 
         return $this->render('contact/edit.html.twig', [
             'contact' => $contact,
-            'form' => $form,
+            'form' => $form->createView(),
         ]);
     }
 
-    #[Route('contacts/{slug}/delete', name: 'contact.delete', methods: ['POST'])]
+    #[Route('contact/{slug}/delete', name: 'contact.delete', methods: ['POST'])]
     public function delete(
         Request $request,
         #[MapEntity(mapping: ['slug' => 'slug'])] Contact $contact,

@@ -19,7 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/')]
 final class OpportunityController extends AbstractController
 {
-    #[Route('opportunity', name: 'opportunities.list', methods: ['GET'])]
+    #[Route('/opportunities', name: 'opportunity.list', methods: ['GET'])]
     public function index(OpportunityRepository $opportunityRepository): Response
     {
         return $this->render('opportunity/index.html.twig', [
@@ -51,7 +51,7 @@ final class OpportunityController extends AbstractController
         }
 
         return $this->render('opportunity/new.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
             'account' => $account,
         ]);
     }

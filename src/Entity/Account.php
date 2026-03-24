@@ -166,7 +166,6 @@ class Account
     {
         $this->accountName = mb_strtoupper(trim($accountName));
 
-
         return $this;
     }
 

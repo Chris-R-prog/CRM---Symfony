@@ -73,6 +73,9 @@ class Opportunity
     #[ORM\OneToMany(targetEntity: OpportunityLog::class, mappedBy: 'opportunity', orphanRemoval: true)]
     private Collection $opportunityLogs;
 
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $content = null;
+
     public function __construct()
     {
         $this->opportunityContacts = new ArrayCollection();
@@ -139,6 +142,19 @@ class Opportunity
         }
 
         return $this->amount * ($this->opportunityStage->getProbability() / 100);
+    }
+
+
+    public function getContent(): ?string
+    {
+        return $this->content;
+    }
+
+    public function setContent(?string $content): static
+    {
+        $this->content = $content;
+
+        return $this;
     }
 
     public function __toString(): string

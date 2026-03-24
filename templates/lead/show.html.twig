@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+
+<title>Lead</title>
+
+{% block body %}
+    <h1>Lead</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ lead.id }}</td>
+            </tr>
+            <tr>
+                <th>Title</th>
+                <td>{{ lead.title }}</td>
+            </tr>
+            <tr>
+                <th>FirstName</th>
+                <td>{{ lead.firstName }}</td>
+            </tr>
+            <tr>
+                <th>LastName</th>
+                <td>{{ lead.lastName }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ lead.email }}</td>
+            </tr>
+            <tr>
+                <th>PhoneNumber</th>
+                <td>{{ lead.phoneNumber }}</td>
+            </tr>
+            <tr>
+                <th>CompanyName</th>
+                <td>{{ lead.companyName }}</td>
+            </tr>
+            <tr>
+                <th>Jobtitle</th>
+                <td>{{ lead.jobtitle }}</td>
+            </tr>
+            <tr>
+                <th>Source</th>
+                <td>{{ lead.source }}</td>
+            </tr>
+            <tr>
+                <th>Subject</th>
+                <td>{{ lead.subject }}</td>
+            </tr>
+            <tr>
+                <th>Comment</th>
+                <td>{{ lead.comment }}</td>
+            </tr>
+            <tr>
+                <th>Converted_at</th>
+                <td>{{ lead.convertedAt ? lead.convertedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ lead.status }}</td>
+            </tr>
+            <tr>
+                <th>CreatedAt</th>
+                <td>{{ lead.createdAt ? lead.createdAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>LastModifiedAt</th>
+                <td>{{ lead.lastModifiedAt ? lead.lastModifiedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>DeletedAt</th>
+                <td>{{ lead.deletedAt ? lead.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Slug</th>
+                <td>{{ lead.slug }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_lead_index') }}">back to list</a>
+
+    <a href="{{ path('app_lead_edit', {'id': lead.id}) }}">edit</a>
+
+    {{ include('lead/_delete_form.html.twig') }}
+{% endblock %}

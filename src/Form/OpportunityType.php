@@ -15,6 +15,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 
 class OpportunityType extends AbstractType
 {
@@ -33,11 +34,17 @@ class OpportunityType extends AbstractType
                 'placeholder' => 'Priorité',
                 'required' => true,
             ])
+
+            ->add('content', TextareaType::class, [
+                'required' => false
+            ])
+
             ->add('expected_close_date', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false,
                 'empty_data' => null,
             ])
+
             ->add('opportunityStage', EntityType::class, [
                 'class' => OpportunityStage::class,
                 'choice_label' => 'name',
