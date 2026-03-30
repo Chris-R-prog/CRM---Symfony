@@ -13,7 +13,7 @@
             </tr>
             <tr>
                 <th>Title</th>
-                <td>{{ lead.title.label }}</td>
+                <td>{{ lead.title ? lead.title.label :"—"}}</td>
             </tr>
             <tr>
                 <th>FirstName</th>
@@ -62,22 +62,6 @@
             <tr>
                 <th>Status</th>
                 <td>{{ lead.status.label }}</td>
-            </tr>
-            <tr>
-                <th>CreatedAt</th>
-                <td>{{ lead.createdAt ? lead.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>LastModifiedAt</th>
-                <td>{{ lead.lastModifiedAt ? lead.lastModifiedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>DeletedAt</th>
-                <td>{{ lead.deletedAt ? lead.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ lead.slug }}</td>
             </tr>
         </tbody>
     </table>

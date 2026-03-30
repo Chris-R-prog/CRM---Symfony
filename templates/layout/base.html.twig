@@ -58,20 +58,14 @@
             class="w-full mb-6 px-4 py-2 rounded-lg bg-slate-800 border border-slate-700"
         />
 
-        {% block content %}
+        {% block content %}{% endblock %}
 
-        {% endblock %}
-
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
-            {% endblock %}
+        {% include 'partials/flash.html.twig' %}
+            
+    {% endblock %}
     </main>
-{% include 'partials/sidebar_right.html.twig' %}
+
+    {% include 'partials/sidebar_right.html.twig' %}
 </div>
 </body>
 </html>

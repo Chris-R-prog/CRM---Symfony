@@ -33,6 +33,8 @@ final class ContactRoleController extends AbstractController
             $entityManager->persist($contactRole);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le rôle a bien été créé');
+
             return $this->redirectToRoute('admin.contact_role', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -51,6 +53,8 @@ final class ContactRoleController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le rôle a bien été modifié');
+
             return $this->redirectToRoute('admin.contact_role', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -66,6 +70,8 @@ final class ContactRoleController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $contactRole->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($contactRole);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Le rôle a bien été supprimé');
         }
 
         return $this->redirectToRoute('admin.contact_role', [], Response::HTTP_SEE_OTHER);

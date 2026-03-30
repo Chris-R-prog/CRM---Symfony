@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Account;
 use App\Entity\Industry;
+use App\Enum\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -14,6 +15,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use App\Repository\AccountRepository;
 use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\UrlType;
 
 
@@ -23,6 +25,14 @@ class AccountType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
+
+            ->add('type', EnumType::class, [
+                'class' => Type::class,
+                'choice_label' => fn(?Type $choice) => $choice?->label() ?? '',
+                'placeholder' => 'Type',
+                'required' => true,
+            ])
+
             ->add('ownerUserId', IntegerType::class, [
                 'required' => false,
                 'attr' => ['min' => 1]

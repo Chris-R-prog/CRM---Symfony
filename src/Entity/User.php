@@ -2,16 +2,24 @@
 
 namespace App\Entity;
 
+use App\Entity\Traits\Timestampable;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_UUID', fields: ['uuid'])]
+
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    use Timestampable;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -35,9 +43,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
+    #[ORM\Column(length: 100)]
+    #[Assert\Length(
+        min: 2,
+        max: 100
+    )]
+    #[Assert\Regex(
+        pattern: "/^[\p{L} '-]+$/u",
+        message: "Le nom contient des caractères invalides."
+    )]
+    private ?string $lastName = null;
+
+    #[ORM\Column(length: 100)]
+    #[Assert\NotBlank]
+    #[Assert\Length(
+        min: 2,
+        max: 100
+    )]
+    #[Assert\Regex(
+        pattern: "/^[\p{L} '-]+$/u",
+        message: "Le nom contient des caractères invalides."
+    )]
+    private ?string $firstName = null;
+
+    /**
+     * @var Collection<int, Lead>
+     */
+    #[ORM\OneToMany(targetEntity: Lead::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $leads;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $isActive = true;
+
     public function __construct()
     {
         $this->uuid = Uuid::v4();
+        $this->leads = new ArrayCollection();
+    }
+
+    // fonction utilisée par Symfony pour définir si un utilisateur est autorisé ou non : lien avec isActive
+    public function isEnabled(): bool
+    {
+        return $this->isActive;
     }
 
     public function getId(): ?int
@@ -53,6 +100,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getEmail(): ?string
     {
         return $this->email;
+    }
+
+    public function setEmail(?string $email): static
+    {
+        $this->email = $email ? trim($email) : null;
+
+        return $this;
     }
 
     /**
@@ -117,5 +171,88 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    public function getLastName(): ?string
+    {
+        return $this->lastName;
+    }
+
+    public function setLastName(string $lastName): static
+    {
+        $this->lastName = $lastName;
+
+        return $this;
+    }
+
+    public function getFirstName(): ?string
+    {
+        return $this->firstName;
+    }
+
+    public function setFirstName(string $firstName): static
+    {
+        $this->firstName = $firstName;
+
+        return $this;
+    }
+
+    public function configureOptions(OptionsResolver $resolver): void
+    {
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
+    }
+
+    /**
+     * @return Collection<int, Lead>
+     */
+    public function getLeads(): Collection
+    {
+        return $this->leads;
+    }
+
+    public function addLead(Lead $lead): static
+    {
+        if (!$this->leads->contains($lead)) {
+            $this->leads->add($lead);
+            $lead->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeLead(Lead $lead): static
+    {
+        if ($this->leads->removeElement($lead)) {
+            // set the owning side to null (unless already changed)
+            if ($lead->getUser() === $this) {
+                $lead->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function isActive(): ?bool
+    {
+        return $this->isActive;
+    }
+
+    public function setIsActive(?bool $isActive): static
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    public function activate(): void
+    {
+        $this->isActive = true;
+    }
+
+    public function deactivate(): void
+    {
+        $this->isActive = false;
     }
 }

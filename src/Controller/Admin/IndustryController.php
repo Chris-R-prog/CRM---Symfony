@@ -33,6 +33,8 @@ final class IndustryController extends AbstractController
             $entityManager->persist($industry);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Le secteur d\'activité a bien été créé');
+
             return $this->redirectToRoute('admin.industry', [], Response::HTTP_SEE_OTHER);
         }
 

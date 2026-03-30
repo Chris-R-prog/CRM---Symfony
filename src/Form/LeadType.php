@@ -22,7 +22,7 @@ class LeadType extends AbstractType
         $builder
             ->add('title', EnumType::class, [
                 'class' => Title::class,
-                'choice_label' => fn(Title $choice) => $choice->name,
+                'choice_label' => fn(?Title $choice) => $choice?->label() ?? '',
                 'placeholder' => 'Civilité',
                 'required' => false,
             ])

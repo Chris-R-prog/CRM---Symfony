@@ -35,6 +35,8 @@ final class OpportunityStageController extends AbstractController
             $entityManager->persist($opportunityStage);
             $entityManager->flush();
 
+            $this->addFlash('success', 'L\'étape de vente a bien été créée');
+
             return $this->redirectToRoute('admin.opportunity_stage', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -53,6 +55,8 @@ final class OpportunityStageController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
+            $this->addFlash('success', 'L\'étape de vente a bien été modifiée');
+
             return $this->redirectToRoute('admin.opportunity_stage', [], Response::HTTP_SEE_OTHER);
         }
 
@@ -68,6 +72,8 @@ final class OpportunityStageController extends AbstractController
         if ($this->isCsrfTokenValid('delete' . $opportunityStage->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($opportunityStage);
             $entityManager->flush();
+
+            $this->addFlash('success', 'L\'étape de vente à bien été supprimée');
         }
 
         return $this->redirectToRoute('admin.opportunity_stage', [], Response::HTTP_SEE_OTHER);

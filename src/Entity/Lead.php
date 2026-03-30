@@ -112,6 +112,10 @@ class Lead implements SluggableInterface
     #[Assert\Country]
     private ?string $country = 'FR';
 
+    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'leads')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $user = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -280,6 +284,18 @@ class Lead implements SluggableInterface
     public function setCountry(?string $country): static
     {
         $this->country = $country ? strtoupper(trim($country)) : null;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

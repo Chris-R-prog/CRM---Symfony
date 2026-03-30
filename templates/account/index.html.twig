@@ -29,6 +29,7 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Type</th>
                 <th>PostalCode</th>
                 <th>City</th>
                 <th>AccountName</th>
@@ -43,6 +44,7 @@
         <tbody>
         {% for account in accounts %}
             <tr>
+                <td>{{ account.type ? account.type.label :"—"}}</td>
                 <td>{{ account.postalCode }}</td>
                 <td>{{ account.City }}</td>
                 <td>{{ account.accountName }}</td>

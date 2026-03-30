@@ -14,6 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use App\Entity\Traits\Sluggable;
+use App\Enum\Type;
 
 #[ORM\Entity(repositoryClass: AccountRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -129,6 +130,9 @@ class Account implements SluggableInterface
      */
     #[ORM\OneToMany(targetEntity: Opportunity::class, mappedBy: 'account', orphanRemoval: true)]
     private Collection $opportunities;
+
+    #[ORM\Column(enumType: Type::class)]
+    private Type $type = Type::Prospect;
 
     public function __construct()
     {
@@ -414,6 +418,18 @@ class Account implements SluggableInterface
                 $opportunity->setAccount(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getType(): Type
+    {
+        return $this->type;
+    }
+
+    public function setType(?Type $type): static
+    {
+        $this->type = $type;
 
         return $this;
     }

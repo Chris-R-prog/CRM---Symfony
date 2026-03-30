@@ -26,7 +26,7 @@ class DevAuthentificator extends AbstractAuthenticator
     public function supports(Request $request): ?bool
     {
         return $_ENV['APP_ENV'] === 'dev'
-            && !$request->attributes->get('_route') === 'app_login';
+            && $request->attributes->get('_route') !== 'app_login';
     }
 
     public function authenticate(Request $request): Passport

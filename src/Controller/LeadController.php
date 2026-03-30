@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Lead;
+use App\Entity\User;
 use App\Form\LeadType;
 use App\Repository\LeadRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -16,10 +18,17 @@ use Symfony\Component\Routing\Attribute\Route;
 final class LeadController extends AbstractController
 {
     #[Route('/leads', name: 'leads.list', methods: ['GET'])]
-    public function index(LeadRepository $leadRepository): Response
-    {
+    public function index(
+        LeadRepository $leadRepository,
+        Security $security,
+    ): Response {
+        $user = $security->getUser();
+        if (!$user) {
+            throw $this->createAccessDeniedException();
+        }
+
         return $this->render('lead/index.html.twig', [
-            'leads' => $leadRepository->findActive(),
+            'leads' => $leadRepository->findActiveByUser($user),
         ]);
     }
 
@@ -27,8 +36,10 @@ final class LeadController extends AbstractController
     public function new(
         Request $request,
         EntityManagerInterface $entityManager,
+        Security $security
     ): Response {
         $lead = new Lead();
+        $lead->setUser($security->getUser());
         $form = $this->createForm(LeadType::class, $lead);
         $form->handleRequest($request);
 
