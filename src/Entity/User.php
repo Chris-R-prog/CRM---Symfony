@@ -50,7 +50,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     #[Assert\Regex(
         pattern: "/^[\p{L} '-]+$/u",
-        message: "Le nom contient des caractères invalides."
+        message: "Le nom contient des caracteres invalides."
     )]
     private ?string $lastName = null;
 
@@ -62,7 +62,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     )]
     #[Assert\Regex(
         pattern: "/^[\p{L} '-]+$/u",
-        message: "Le nom contient des caractères invalides."
+        message: "Le nom contient des caracteres invalides."
     )]
     private ?string $firstName = null;
 
@@ -75,13 +75,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'boolean')]
     private bool $isActive = true;
 
+    /**
+     * @var Collection<int, Activity>
+     */
+    #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $activities;
+
     public function __construct()
     {
         $this->uuid = Uuid::v4();
         $this->leads = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
-    // fonction utilisée par Symfony pour définir si un utilisateur est autorisé ou non : lien avec isActive
+    // Fonction utilisee par Symfony pour definir si un utilisateur est autorise ou non.
     public function isEnabled(): bool
     {
         return $this->isActive;
@@ -94,7 +101,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function getUuid(): ?string
     {
-        return $this->uuid;
+        return $this->uuid?->toRfc4122();
     }
 
     public function getEmail(): ?string
@@ -197,12 +204,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    /*
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class,
         ]);
     }
+    */
 
     /**
      * @return Collection<int, Lead>
@@ -225,9 +234,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeLead(Lead $lead): static
     {
         if ($this->leads->removeElement($lead)) {
-            // set the owning side to null (unless already changed)
+            // `user` is non-nullable, so the lead must be removed or reassigned rather than nulled.
             if ($lead->getUser() === $this) {
-                $lead->setUser(null);
+                // $lead->setUser(null);
             }
         }
 
@@ -254,5 +263,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function deactivate(): void
     {
         $this->isActive = false;
+    }
+
+    /**
+     * @return Collection<int, Activity>
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(Activity $activity): static
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
+            $activity->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(Activity $activity): static
+    {
+        if ($this->activities->removeElement($activity)) {
+            // `user` is non-nullable, so the activity must be removed or reassigned rather than nulled.
+            if ($activity->getUser() === $this) {
+                // $activity->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

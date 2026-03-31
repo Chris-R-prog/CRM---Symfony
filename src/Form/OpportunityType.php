@@ -30,6 +30,7 @@ class OpportunityType extends AbstractType
             ])
             ->add('priority', EnumType::class, [
                 'class' => Priority::class,
+                'choice_label' => fn(?Priority $choice) => $choice?->label() ?? '',
                 'placeholder' => 'Priorité',
                 'required' => true,
             ])

@@ -24,7 +24,7 @@ class ContactRole
     /**
      * @var Collection<int, OpportunityContact>
      */
-    #[ORM\OneToMany(targetEntity: OpportunityContact::class, mappedBy: 'contact_role')]
+    #[ORM\OneToMany(targetEntity: OpportunityContact::class, mappedBy: 'contact_role', orphanRemoval: true)]
     private Collection $opportunityContacts;
 
     public function __construct()
@@ -63,7 +63,7 @@ class ContactRole
 
     public function __toString(): string
     {
-        return $this->name ?? 'Rôle du contact';
+        return $this->name ?? 'Role du contact';
     }
 
     /**
@@ -87,9 +87,9 @@ class ContactRole
     public function removeOpportunityContact(OpportunityContact $opportunityContact): static
     {
         if ($this->opportunityContacts->removeElement($opportunityContact)) {
-            // set the owning side to null (unless already changed)
+            // `contact_role` is non-nullable, so the link must be removed rather than nulled.
             if ($opportunityContact->getContactRole() === $this) {
-                $opportunityContact->setContactRole(null);
+                // $opportunityContact->setContactRole(null);
             }
         }
 

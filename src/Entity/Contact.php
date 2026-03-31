@@ -58,7 +58,7 @@ class Contact implements SluggableInterface
     )]
     #[Assert\Regex(
         pattern: "/^[\p{L} '-]+$/u",
-        message: "Le nom contient des caractères invalides."
+        message: "Le nom contient des caracteres invalides."
     )]
     private ?string $firstName = null;
 
@@ -69,7 +69,7 @@ class Contact implements SluggableInterface
     )]
     #[Assert\Regex(
         pattern: "/^[\p{L} '-]+$/u",
-        message: "Le nom contient des caractères invalides."
+        message: "Le nom contient des caracteres invalides."
     )]
     private ?string $lastName = null;
 
@@ -122,12 +122,19 @@ class Contact implements SluggableInterface
     /**
      * @var Collection<int, OpportunityContact>
      */
-    #[ORM\OneToMany(targetEntity: OpportunityContact::class, mappedBy: 'contact')]
+    #[ORM\OneToMany(targetEntity: OpportunityContact::class, mappedBy: 'contact', orphanRemoval: true)]
     private Collection $opportunityContacts;
+
+    /**
+     * @var Collection<int, Activity>
+     */
+    #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'contact')]
+    private Collection $activities;
 
     public function __construct()
     {
         $this->opportunityContacts = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -346,11 +353,47 @@ class Contact implements SluggableInterface
         return $this;
     }
 
-    public function removeContact(OpportunityContact $opportunityContact): static
+    public function removeOpportunityContact(OpportunityContact $opportunityContact): static
     {
         if ($this->opportunityContacts->removeElement($opportunityContact)) {
             if ($opportunityContact->getContact() === $this) {
-                $opportunityContact->setContact(null);
+                // `contact` is non-nullable, so the link must be removed rather than nulled.
+                // $opportunityContact->setContact(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function removeContact(OpportunityContact $opportunityContact): static
+    {
+        return $this->removeOpportunityContact($opportunityContact);
+    }
+
+    /**
+     * @return Collection<int, Activity>
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(Activity $activity): static
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
+            $activity->setContact($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(Activity $activity): static
+    {
+        if ($this->activities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getContact() === $this) {
+                $activity->setContact(null);
             }
         }
 

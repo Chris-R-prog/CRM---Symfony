@@ -4,18 +4,18 @@ namespace App\Enum;
 
 enum Title: string
 {
-    case M = 'm';
-    case Mme = 'mme';
-    case Autre = 'other';
-    case Dr = 'dr';
+    case MR = 'mr';
+    case MRS = 'mrs';
+    case OTHER = 'other';
+    case DR = 'dr';
 
     public function label(): string
     {
         return match ($this) {
-            self::M => 'M',
-            self::Mme => 'Mme',
-            self::Autre => 'Autre',
-            self::Dr => 'Dr',
+            self::MR => 'M.',
+            self::MRS => 'Mme',
+            self::OTHER => 'Autre',
+            self::DR => 'Dr',
         };
     }
 }

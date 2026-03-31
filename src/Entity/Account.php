@@ -132,12 +132,19 @@ class Account implements SluggableInterface
     private Collection $opportunities;
 
     #[ORM\Column(enumType: Type::class)]
-    private Type $type = Type::Prospect;
+    private Type $type = Type::PROSPECT;
+
+    /**
+     * @var Collection<int, Activity>
+     */
+    #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'account')]
+    private Collection $activities;
 
     public function __construct()
     {
         $this->contacts = new ArrayCollection();
         $this->opportunities = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -259,7 +266,7 @@ class Account implements SluggableInterface
 
     public function setTurnover(?string $turnover): static
     {
-        $turnover = trim($turnover);
+        $turnover = $turnover !== null ? trim($turnover) : null;
         $this->turnover = $turnover === '' ? null : $turnover;
         return $this;
     }
@@ -413,9 +420,9 @@ class Account implements SluggableInterface
     public function removeOpportunity(Opportunity $opportunity): static
     {
         if ($this->opportunities->removeElement($opportunity)) {
-            // set the owning side to null (unless already changed)
+            // `account` is non-nullable, so the opportunity must be removed or reassigned rather than nulled.
             if ($opportunity->getAccount() === $this) {
-                $opportunity->setAccount(null);
+                // $opportunity->setAccount(null);
             }
         }
 
@@ -430,6 +437,36 @@ class Account implements SluggableInterface
     public function setType(?Type $type): static
     {
         $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Activity>
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(Activity $activity): static
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
+            $activity->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(Activity $activity): static
+    {
+        if ($this->activities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getAccount() === $this) {
+                $activity->setAccount(null);
+            }
+        }
 
         return $this;
     }

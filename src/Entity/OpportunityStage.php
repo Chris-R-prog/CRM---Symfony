@@ -42,12 +42,14 @@ class OpportunityStage
      * @var Collection<int, OpportunityLog>
      */
     #[ORM\OneToMany(targetEntity: OpportunityLog::class, mappedBy: 'stage', orphanRemoval: true)]
-    private Collection $yes;
+    // private Collection $yes;
+    private Collection $opportunityLogs;
 
     public function __construct()
     {
         $this->opportunities = new ArrayCollection();
-        $this->yes = new ArrayCollection();
+        // $this->yes = new ArrayCollection();
+        $this->opportunityLogs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -93,7 +95,7 @@ class OpportunityStage
 
     public function __toString(): string
     {
-        return $this->name;
+        return $this->name ?? '';
     }
 
     /**
@@ -117,9 +119,39 @@ class OpportunityStage
     public function removeOpportunity(Opportunity $opportunity): static
     {
         if ($this->opportunities->removeElement($opportunity)) {
-            // set the owning side to null (unless already changed)
+            // `opportunityStage` is non-nullable, so the opportunity must be reassigned or removed.
             if ($opportunity->getOpportunityStage() === $this) {
-                $opportunity->setOpportunityStage(null);
+                // $opportunity->setOpportunityStage(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, OpportunityLog>
+     */
+    public function getOpportunityLogs(): Collection
+    {
+        return $this->opportunityLogs;
+    }
+
+    public function addOpportunityLog(OpportunityLog $opportunityLog): static
+    {
+        if (!$this->opportunityLogs->contains($opportunityLog)) {
+            $this->opportunityLogs->add($opportunityLog);
+            $opportunityLog->setStage($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOpportunityLog(OpportunityLog $opportunityLog): static
+    {
+        if ($this->opportunityLogs->removeElement($opportunityLog)) {
+            if ($opportunityLog->getStage() === $this) {
+                // `stage` is non-nullable, so the log should be removed with orphanRemoval.
+                // $opportunityLog->setStage(null);
             }
         }
 
@@ -131,26 +163,16 @@ class OpportunityStage
      */
     public function getYes(): Collection
     {
-        return $this->yes;
+        return $this->getOpportunityLogs();
     }
 
     public function addYe(OpportunityLog $ye): static
     {
-        if (!$this->yes->contains($ye)) {
-            $this->yes->add($ye);
-            $ye->setStage($this);
-        }
-
-        return $this;
+        return $this->addOpportunityLog($ye);
     }
 
     public function removeYe(OpportunityLog $ye): static
     {
-        if ($this->yes->removeElement($ye)) {
-            if ($ye->getStage() === $this) {
-            }
-        }
-
-        return $this;
+        return $this->removeOpportunityLog($ye);
     }
 }

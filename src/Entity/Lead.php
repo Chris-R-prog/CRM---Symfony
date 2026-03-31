@@ -8,6 +8,8 @@ use App\Entity\Traits\SoftDeleteable;
 use App\Entity\Traits\Timestampable;
 use App\Enum\Title;
 use App\Repository\LeadRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use App\Enum\Status;
 use Doctrine\ORM\Mapping as ORM;
@@ -52,7 +54,7 @@ class Lead implements SluggableInterface
     )]
     #[Assert\Regex(
         pattern: "/^[\p{L} '-]+$/u",
-        message: "Le nom contient des caractères invalides."
+        message: "Le nom contient des caracteres invalides."
     )]
     private ?string $firstName = null;
 
@@ -63,7 +65,7 @@ class Lead implements SluggableInterface
     )]
     #[Assert\Regex(
         pattern: "/^[\p{L} '-]+$/u",
-        message: "Le nom contient des caractères invalides."
+        message: "Le nom contient des caracteres invalides."
     )]
     private ?string $lastName = null;
 
@@ -106,7 +108,7 @@ class Lead implements SluggableInterface
     private ?\DateTimeImmutable $converted_at = null;
 
     #[ORM\Column(enumType: Status::class)]
-    private Status $status = Status::Nouveau;
+    private Status $status = Status::NEW;
 
     #[ORM\Column(length: 100, nullable: true)]
     #[Assert\Country]
@@ -115,6 +117,17 @@ class Lead implements SluggableInterface
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'leads')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
+
+    /**
+     * @var Collection<int, Activity>
+     */
+    #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'lead')]
+    private Collection $activities;
+
+    public function __construct()
+    {
+        $this->activities = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -296,6 +309,36 @@ class Lead implements SluggableInterface
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Activity>
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(Activity $activity): static
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
+            $activity->setLead($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(Activity $activity): static
+    {
+        if ($this->activities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getLead() === $this) {
+                $activity->setLead(null);
+            }
+        }
 
         return $this;
     }

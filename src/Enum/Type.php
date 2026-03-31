@@ -4,14 +4,14 @@ namespace App\Enum;
 
 enum Type: string
 {
-    case Client = 'c';
-    case Prospect = 'p';
+    case CLIENT = 'c';
+    case PROSPECT = 'p';
 
     public function label(): string
     {
         return match ($this) {
-            self::Client => 'Client',
-            self::Prospect => 'Prospect',
+            self::CLIENT => 'Client',
+            self::PROSPECT => 'Prospect',
         };
     }
 }

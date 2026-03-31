@@ -53,8 +53,8 @@ class Opportunity implements SluggableInterface
     #[Assert\PositiveOrZero]
     private ?string $amount = null;
 
-    #[ORM\Column(enumType: Priority::class, nullable: true)]
-    private ?Priority $priority = null;
+    #[ORM\Column(enumType: Priority::class, nullable: false)]
+    private Priority $priority = Priority::MEDIUM;
 
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $expected_close_date = null;
@@ -82,10 +82,17 @@ class Opportunity implements SluggableInterface
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $content = null;
 
+    /**
+     * @var Collection<int, Activity>
+     */
+    #[ORM\OneToMany(targetEntity: Activity::class, mappedBy: 'opportunity')]
+    private Collection $activities;
+
     public function __construct()
     {
         $this->opportunityContacts = new ArrayCollection();
         $this->opportunityLogs = new ArrayCollection();
+        $this->activities = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -189,9 +196,9 @@ class Opportunity implements SluggableInterface
     public function removeOpportunityContact(OpportunityContact $opportunityContact): static
     {
         if ($this->opportunityContacts->removeElement($opportunityContact)) {
-            // set the owning side to null (unless already changed)
+            // `opportunity` is non-nullable, so the link must be removed rather than nulled.
             if ($opportunityContact->getOpportunity() === $this) {
-                $opportunityContact->setOpportunity(null);
+                // $opportunityContact->setOpportunity(null);
             }
         }
 
@@ -243,8 +250,39 @@ class Opportunity implements SluggableInterface
     public function removeOpportunityLog(OpportunityLog $opportunityLog): static
     {
         if ($this->opportunityLogs->removeElement($opportunityLog)) {
-            // set the owning side to null (unless already changed)
+            // `opportunity` is non-nullable, so the log should be removed with orphanRemoval.
             if ($opportunityLog->getOpportunity() === $this) {
+                // $opportunityLog->setOpportunity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Activity>
+     */
+    public function getActivities(): Collection
+    {
+        return $this->activities;
+    }
+
+    public function addActivity(Activity $activity): static
+    {
+        if (!$this->activities->contains($activity)) {
+            $this->activities->add($activity);
+            $activity->setOpportunity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeActivity(Activity $activity): static
+    {
+        if ($this->activities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getOpportunity() === $this) {
+                $activity->setOpportunity(null);
             }
         }
 

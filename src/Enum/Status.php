@@ -4,20 +4,20 @@ namespace App\Enum;
 
 enum Status: string
 {
-    case Nouveau = 'new';
-    case Contacté = 'contacted';
-    case Qualifié = 'qualified';
-    case Gagné = 'won';
-    case Perdu = 'lost';
+    case NEW = 'new';
+    case CONTACTED = 'contacted';
+    case QUALIFIED = 'qualified';
+    case CONVERTED = 'converted';
+    case LOST = 'lost';
 
     public function label(): string
     {
         return match ($this) {
-            self::Nouveau => 'Nouveau',
-            self::Contacté => 'Contacté',
-            self::Qualifié => 'Qualifié',
-            self::Gagné => 'Gagné',
-            self::Perdu => 'Perdu',
+            self::NEW => 'Nouveau',
+            self::CONTACTED => 'Contacté',
+            self::QUALIFIED => 'Qualifié',
+            self::CONVERTED => 'Converti',
+            self::LOST => 'Perdu',
         };
     }
 }

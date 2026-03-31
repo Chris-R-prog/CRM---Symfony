@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<title>Activity index</title>
+
+{% block body %}
+    <h1>Activity index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Subject</th>
+                <th>ActivityType</th>
+                <th>Priority</th>
+                <th>Direction</th>
+                <th>Scheduled_at</th>
+                <th>Due_date</th>
+                <th>Completed_at</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for activity in activities %}
+            <tr>
+                <td>{{ activity.id }}</td>
+                <td>{{ activity.subject }}</td>
+                <td>{{ activity.activityTypeEnum ? activity.activityTypeEnum.label :"—" }}</td>
+                <td>{{ activity.priority }}</td>
+                <td>{{ activity.direction }}</td>
+                <td>{{ activity.scheduledAt ? activity.scheduledAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ activity.dueDate ? activity.dueDate|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ activity.completedAt ? activity.completedAt|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ activity.slug }}</td>
+                <td>
+                    <a href="{{ path('app_activity_show', {'id': activity.id}) }}">show</a>
+                    <a href="{{ path('app_activity_edit', {'id': activity.id}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="13">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_activity_new') }}">Create new</a>
+{% endblock %}

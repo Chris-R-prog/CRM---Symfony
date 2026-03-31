@@ -28,7 +28,7 @@ class OpportunityLog
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Opportunity $opportunity = null;
 
-    #[ORM\ManyToOne(targetEntity: OpportunityStage::class)]
+    #[ORM\ManyToOne(targetEntity: OpportunityStage::class, inversedBy: 'opportunityLogs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?OpportunityStage $stage = null;
 

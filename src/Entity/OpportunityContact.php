@@ -21,7 +21,7 @@ class OpportunityContact
     #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private ?Contact $contact = null;
 
-    #[ORM\ManyToOne(targetEntity: ContactRole::class)]
+    #[ORM\ManyToOne(targetEntity: ContactRole::class, inversedBy: 'opportunityContacts')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ContactRole $contact_role = null;
 
